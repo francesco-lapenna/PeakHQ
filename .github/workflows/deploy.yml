@@ -1,0 +1,39 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  id-token: write  # Required for OIDC authentication to AWS
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy to AWS
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # PLACEHOLDER: Add language runtime setup here after tech stack decision.
+
+      # PLACEHOLDER: Add dependency installation step.
+
+      # PLACEHOLDER: Add test step — full suite must pass before deploying.
+
+      # Authenticate to AWS via OIDC (no long-lived credentials stored in GitHub Secrets)
+      # PLACEHOLDER: Fill in aws-region and role-to-assume after AWS OIDC setup.
+      # - name: Configure AWS Credentials
+      #   uses: aws-actions/configure-aws-credentials@v4
+      #   with:
+      #     role-to-assume: arn:aws:iam::<account-id>:role/PeakHQGitHubActionsRole
+      #     aws-region: eu-south-1
+
+      # CDK deploy
+      # PLACEHOLDER: Uncomment and adjust once infra/ CDK project is scaffolded.
+      # - name: CDK Deploy
+      #   working-directory: infra
+      #   run: |
+      #     npm ci
+      #     npx cdk deploy --all --require-approval never

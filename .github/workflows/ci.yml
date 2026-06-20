@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  ci:
+    name: Lint, Test, CDK Synth
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # PLACEHOLDER: Add language runtime setup here after tech stack decision.
+      # Examples:
+      #   Node.js:   uses: actions/setup-node@v4 with: { node-version: '22' }
+      #   Python:    uses: actions/setup-python@v5 with: { python-version: '3.12' }
+
+      # PLACEHOLDER: Add dependency installation step.
+      # Examples:
+      #   npm ci
+      #   pip install -r requirements.txt
+
+      # PLACEHOLDER: Add lint step.
+      # Example: run: npm run lint
+
+      # PLACEHOLDER: Add type check step (if applicable).
+      # Example: run: npm run typecheck
+
+      # PLACEHOLDER: Add test step with coverage.
+      # Example: run: npm test -- --coverage
+
+      # CDK synth (validates infrastructure compiles without errors)
+      # PLACEHOLDER: Uncomment and adjust once infra/ CDK project is scaffolded.
+      # - name: CDK Synth
+      #   working-directory: infra
+      #   run: |
+      #     npm ci
+      #     npx cdk synth

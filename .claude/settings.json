@@ -1,0 +1,72 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git status:*)",
+      "Bash(git log:*)",
+      "Bash(git log *)",
+      "Bash(git diff:*)",
+      "Bash(git diff *)",
+      "Bash(git branch:*)",
+      "Bash(git branch *)",
+      "Bash(git checkout:*)",
+      "Bash(git checkout *)",
+      "Bash(git show:*)",
+      "Bash(git show *)",
+      "Bash(git tag:*)",
+      "Bash(git tag *)",
+      "Bash(git remote:*)",
+      "Bash(git fetch:*)",
+      "Bash(aws *)",
+      "Bash(npx cdk *)",
+      "Bash(gh *)",
+      "Bash(find . *)",
+      "Bash(ls *)",
+      "Bash(cat *)",
+      "Bash(grep *)"
+    ],
+    "deny": []
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/guard-main-branch.sh"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/lint-todos.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/lint-todos.sh"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/tdd-reminder.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
