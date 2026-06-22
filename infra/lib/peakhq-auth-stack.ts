@@ -33,9 +33,11 @@ export class PeakHQAuthStack extends Stack {
       oAuth: {
         flows: { authorizationCodeGrant: true },
         scopes: [cognito.OAuthScope.EMAIL, cognito.OAuthScope.OPENID, cognito.OAuthScope.PROFILE],
-        // Production CloudFront callback URL must be added here after first `cdk deploy`.
-        callbackUrls: ['http://localhost:5173/auth/callback'],
-        logoutUrls: ['http://localhost:5173'],
+        callbackUrls: [
+          'http://localhost:5173/auth/callback',
+          'https://dygybi8tyva9o.cloudfront.net/auth/callback',
+        ],
+        logoutUrls: ['http://localhost:5173', 'https://dygybi8tyva9o.cloudfront.net'],
       },
       authFlows: { userSrp: true },
     });

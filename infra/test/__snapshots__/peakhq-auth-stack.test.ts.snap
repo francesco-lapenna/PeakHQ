@@ -111,6 +111,7 @@ exports[`PeakHQAuthStack matches snapshot 1`] = `
         ],
         "CallbackURLs": [
           "http://localhost:5173/auth/callback",
+          "https://dygybi8tyva9o.cloudfront.net/auth/callback",
         ],
         "ExplicitAuthFlows": [
           "ALLOW_USER_SRP_AUTH",
@@ -119,6 +120,7 @@ exports[`PeakHQAuthStack matches snapshot 1`] = `
         "GenerateSecret": false,
         "LogoutURLs": [
           "http://localhost:5173",
+          "https://dygybi8tyva9o.cloudfront.net",
         ],
         "SupportedIdentityProviders": [
           "COGNITO",
