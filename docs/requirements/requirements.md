@@ -241,6 +241,6 @@ These user stories define the acceptance criteria for Phase 3 (Implementation / 
 
 ### Pending (Phase 2 input)
 
-| # | Question | Impact |
+| # | Question | Decision |
 |---|---|---|
-| OQ-05 | What is the tech stack? (Frontend framework, backend runtime) | Phase 2 output — drives CI/CD workflow, CDK stack choices, and test tooling |
+| OQ-05 | What is the tech stack? | **Resolved** — see `docs/adr/0003-tech-stack.md` |
