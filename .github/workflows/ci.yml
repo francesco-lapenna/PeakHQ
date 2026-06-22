@@ -49,6 +49,16 @@ jobs:
         if: steps.bootstrap.outputs.ready == 'true'
         run: npm run test:coverage
 
+      - name: Build frontend
+        if: steps.bootstrap.outputs.ready == 'true' && hashFiles('frontend/vite.config.ts') != ''
+        run: npm run build
+        working-directory: frontend
+        env:
+          VITE_COGNITO_DOMAIN: ci.example.com
+          VITE_COGNITO_CLIENT_ID: ci-client-id
+          VITE_COGNITO_REDIRECT_URI: https://ci.example.com/auth/callback
+          VITE_API_BASE_URL: https://ci.example.com/api
+
       - name: CDK snapshot tests
         if: steps.bootstrap.outputs.ready == 'true' && hashFiles('infra/jest.config.*') != ''
         run: npm run test:infra
