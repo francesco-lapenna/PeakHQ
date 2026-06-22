@@ -1,6 +1,6 @@
 ---
 description: Check PeakHQ AWS resource status and Free Tier usage
-argument-hint: "[aws-profile] — defaults to current AWS_PROFILE"
+argument-hint: '[aws-profile] — defaults to current AWS_PROFILE'
 allowed-tools: Bash
 ---
 
@@ -16,6 +16,7 @@ aws lambda list-functions \
   --query "Functions[?starts_with(FunctionName, 'PeakHQ') || starts_with(FunctionName, 'peakhq')].{Name:FunctionName,Memory:MemorySize,Runtime:Runtime}" \
   --output table
 ```
+
 Flag any function with MemorySize > 128 MB (check against Free Tier guard rails).
 
 ## DynamoDB
@@ -24,6 +25,7 @@ Flag any function with MemorySize > 128 MB (check against Free Tier guard rails)
 aws dynamodb list-tables --output json
 aws dynamodb describe-limits
 ```
+
 Warn if provisioned capacity approaches 25 RCU/WCU (Free Tier limit).
 
 ## S3
@@ -31,6 +33,7 @@ Warn if provisioned capacity approaches 25 RCU/WCU (Free Tier limit).
 ```bash
 aws s3 ls | grep -i peakhq
 ```
+
 Note bucket names. Warn if total storage is approaching 5 GB.
 
 ## CloudFront
@@ -54,6 +57,7 @@ aws secretsmanager list-secrets \
   --query "SecretList[?starts_with(Name, 'PeakHQ') || starts_with(Name, 'peakhq')].{Name:Name,LastAccessed:LastAccessedDate}" \
   --output table
 ```
+
 Note: each secret costs $0.40/month after the trial. Flag any secrets that may no longer be in use.
 
 ## Current Month Cost
@@ -71,6 +75,7 @@ aws ce get-cost-and-usage \
 ## Summary
 
 After running all commands, provide:
+
 1. List of active resources
 2. Any resources that appear to be outside Free Tier limits (flag these clearly)
 3. Estimated current-month cost

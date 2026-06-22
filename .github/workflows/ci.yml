@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: ["**"]
+    branches: ['**']
   pull_request:
     branches: [main, develop]
 
@@ -14,29 +14,56 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # PLACEHOLDER: Add language runtime setup here after tech stack decision.
-      # Examples:
-      #   Node.js:   uses: actions/setup-node@v4 with: { node-version: '22' }
-      #   Python:    uses: actions/setup-python@v5 with: { python-version: '3.12' }
+      # Detect whether the monorepo has been bootstrapped (Phase 3+).
+      # Before Phase 3, there is no package.json or lock file — skip build steps gracefully.
+      - name: Check bootstrap state
+        id: bootstrap
+        run: |
+          if [ -f "package.json" ] && [ -f "package-lock.json" ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "No package.json / lock file found — skipping build and test steps."
+            echo "Run Phase 3 scaffolding to enable CI."
+          fi
 
-      # PLACEHOLDER: Add dependency installation step.
-      # Examples:
-      #   npm ci
-      #   pip install -r requirements.txt
+      - uses: actions/setup-node@v4
+        if: steps.bootstrap.outputs.ready == 'true'
+        with:
+          node-version: '22'
+          cache: 'npm'
 
-      # PLACEHOLDER: Add lint step.
-      # Example: run: npm run lint
+      - name: Install dependencies
+        if: steps.bootstrap.outputs.ready == 'true'
+        run: npm ci
 
-      # PLACEHOLDER: Add type check step (if applicable).
-      # Example: run: npm run typecheck
+      - name: Lint
+        if: steps.bootstrap.outputs.ready == 'true'
+        run: npm run lint
 
-      # PLACEHOLDER: Add test step with coverage.
-      # Example: run: npm test -- --coverage
+      - name: Type check
+        if: steps.bootstrap.outputs.ready == 'true'
+        run: npm run typecheck
 
-      # CDK synth (validates infrastructure compiles without errors)
-      # PLACEHOLDER: Uncomment and adjust once infra/ CDK project is scaffolded.
-      # - name: CDK Synth
-      #   working-directory: infra
-      #   run: |
-      #     npm ci
-      #     npx cdk synth
+      - name: Unit & integration tests (with coverage)
+        if: steps.bootstrap.outputs.ready == 'true'
+        run: npm run test:coverage
+
+      - name: Build frontend
+        if: steps.bootstrap.outputs.ready == 'true' && hashFiles('frontend/vite.config.ts') != ''
+        run: npm run build
+        working-directory: frontend
+        env:
+          VITE_COGNITO_DOMAIN: ci.example.com
+          VITE_COGNITO_CLIENT_ID: ci-client-id
+          VITE_COGNITO_REDIRECT_URI: https://ci.example.com/auth/callback
+          VITE_API_BASE_URL: https://ci.example.com/api
+
+      - name: CDK snapshot tests
+        if: steps.bootstrap.outputs.ready == 'true' && hashFiles('infra/jest.config.*') != ''
+        run: npm run test:infra
+
+      - name: CDK synth
+        if: steps.bootstrap.outputs.ready == 'true' && hashFiles('infra/cdk.json') != ''
+        working-directory: infra
+        run: npm run synth

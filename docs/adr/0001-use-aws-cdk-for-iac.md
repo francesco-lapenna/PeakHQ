@@ -9,18 +9,19 @@ PeakHQ deploys application infrastructure on AWS. All AWS resources must be vers
 
 The main options evaluated:
 
-| Option | Pros | Cons |
-|---|---|---|
-| AWS CDK (TypeScript) | Type-safe, high-level constructs, generates CloudFormation, first-party AWS support, active development | Requires Node.js toolchain |
-| Terraform | Multi-cloud, large ecosystem, declarative | External tool (non-AWS), HCL learning curve |
-| AWS CloudFormation (raw YAML) | Native AWS, no extra toolchain | Verbose, no type safety, slow to write |
-| AWS SAM | Optimised for Lambda/serverless | Limited to serverless patterns |
+| Option                        | Pros                                                                                                    | Cons                                        |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| AWS CDK (TypeScript)          | Type-safe, high-level constructs, generates CloudFormation, first-party AWS support, active development | Requires Node.js toolchain                  |
+| Terraform                     | Multi-cloud, large ecosystem, declarative                                                               | External tool (non-AWS), HCL learning curve |
+| AWS CloudFormation (raw YAML) | Native AWS, no extra toolchain                                                                          | Verbose, no type safety, slow to write      |
+| AWS SAM                       | Optimised for Lambda/serverless                                                                         | Limited to serverless patterns              |
 
 ## Decision
 
 Use **AWS CDK (TypeScript)** as the sole IaC tool.
 
 Rationale:
+
 - TypeScript provides type safety and IDE completion for all resource definitions.
 - CDK synthesizes to CloudFormation, so we get the reliability of CloudFormation without writing YAML by hand.
 - CDK Constructs allow reusable, testable infrastructure components.
