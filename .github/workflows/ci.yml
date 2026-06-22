@@ -14,26 +14,46 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Detect whether the monorepo has been bootstrapped (Phase 3+).
+      # Before Phase 3, there is no package.json or lock file — skip build steps gracefully.
+      - name: Check bootstrap state
+        id: bootstrap
+        run: |
+          if [ -f "package.json" ] && [ -f "package-lock.json" ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "No package.json / lock file found — skipping build and test steps."
+            echo "Run Phase 3 scaffolding to enable CI."
+          fi
+
       - uses: actions/setup-node@v4
+        if: steps.bootstrap.outputs.ready == 'true'
         with:
           node-version: "22"
           cache: "npm"
 
       - name: Install dependencies
+        if: steps.bootstrap.outputs.ready == 'true'
         run: npm ci
 
       - name: Lint
+        if: steps.bootstrap.outputs.ready == 'true'
         run: npm run lint
 
       - name: Type check
+        if: steps.bootstrap.outputs.ready == 'true'
         run: npm run typecheck
 
       - name: Unit & integration tests (with coverage)
+        if: steps.bootstrap.outputs.ready == 'true'
         run: npm run test:coverage
 
       - name: CDK snapshot tests
+        if: steps.bootstrap.outputs.ready == 'true'
         run: npm run test:infra
 
       - name: CDK synth
-        run: npm run synth
+        if: steps.bootstrap.outputs.ready == 'true'
         working-directory: infra
+        run: npm run synth
