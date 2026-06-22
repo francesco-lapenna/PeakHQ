@@ -20,7 +20,7 @@ exports[`PeakHQApiStack matches snapshot 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "cf6f64f6c6bb398c1632076f8fc166d26b6f6108bbd683b5b817a279406d63dd.zip",
+          "S3Key": "a0d2e99cb3e6924993f599e54d186dfd00719b7b31442c7c3deca4853f5dc7b7.zip",
         },
         "Environment": {
           "Variables": {
@@ -153,7 +153,7 @@ exports[`PeakHQApiStack matches snapshot 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "225df24a3458b66bbad0e9238157efba91cf8debf05ecf0e41d8212a9370173e.zip",
+          "S3Key": "a0d2e99cb3e6924993f599e54d186dfd00719b7b31442c7c3deca4853f5dc7b7.zip",
         },
         "Environment": {
           "Variables": {
@@ -3313,7 +3313,7 @@ exports[`PeakHQApiStack matches snapshot 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "0079889b784a3baa3c2562743f4540290657842cf4f06cc75d0637cdcd818d91.zip",
+          "S3Key": "a0d2e99cb3e6924993f599e54d186dfd00719b7b31442c7c3deca4853f5dc7b7.zip",
         },
         "Environment": {
           "Variables": {
@@ -3446,7 +3446,7 @@ exports[`PeakHQApiStack matches snapshot 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "12825fe77ad37cc251b2812d6475f62ad3f652cd0b9358dd18d7eaf3779a5383.zip",
+          "S3Key": "a0d2e99cb3e6924993f599e54d186dfd00719b7b31442c7c3deca4853f5dc7b7.zip",
         },
         "Environment": {
           "Variables": {
@@ -3579,7 +3579,7 @@ exports[`PeakHQApiStack matches snapshot 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "ba988cb32bcd981a9fbb3d57b6a00eac719f7e44b1ce510634efb6badc038cb6.zip",
+          "S3Key": "a0d2e99cb3e6924993f599e54d186dfd00719b7b31442c7c3deca4853f5dc7b7.zip",
         },
         "Environment": {
           "Variables": {
@@ -3712,7 +3712,7 @@ exports[`PeakHQApiStack matches snapshot 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "c4f59220962752d04870c5c6171f925b28b86375dbe67b64b972a1b12f583975.zip",
+          "S3Key": "a0d2e99cb3e6924993f599e54d186dfd00719b7b31442c7c3deca4853f5dc7b7.zip",
         },
         "Environment": {
           "Variables": {
@@ -3845,7 +3845,7 @@ exports[`PeakHQApiStack matches snapshot 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "535f62a08a914cbe0a0ecd504f04d53180016df7d7174c56e087d00120aa9217.zip",
+          "S3Key": "a0d2e99cb3e6924993f599e54d186dfd00719b7b31442c7c3deca4853f5dc7b7.zip",
         },
         "Environment": {
           "Variables": {

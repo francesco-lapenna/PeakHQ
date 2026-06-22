@@ -30,7 +30,7 @@ export class PeakHQApiStack extends Stack {
       memorySize: 128,
       timeout: Duration.seconds(29),
       environment: { TABLE_NAME: table.tableName },
-      bundling: { minify: true, sourceMap: true },
+      bundling: { minify: true },
     };
 
     const profileFn = new NodejsFunction(this, 'ProfileHandler', {
