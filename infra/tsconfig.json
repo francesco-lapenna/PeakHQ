@@ -2,9 +2,10 @@
   "extends": "../tsconfig.base.json",
   "compilerOptions": {
     "target": "ES2022",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "noEmit": true
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "outDir": "dist"
   },
+  "exclude": ["node_modules", "cdk.out", "dist"],
   "include": ["bin", "lib", "test"]
 }
