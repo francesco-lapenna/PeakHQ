@@ -1,4 +1,4 @@
-import { DeleteCommand, PutCommand, QueryCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
+import { PutCommand, QueryCommand } from '@aws-sdk/lib-dynamodb';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { docClient } from '../lib/dynamo.js';
 import { makeEvent, TEST_USER_ID } from '../test-helpers/event.js';

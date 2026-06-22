@@ -176,7 +176,7 @@ async function putWeeklyLog(
   const now = new Date().toISOString();
   const item = { PK: `USER#${userId}`, SK: `WEEKLYLOG#${weekStart}`, weekStart, ...parsed.data, updatedAt: now };
   await docClient.send(new PutCommand({ TableName: TABLE, Item: item }));
-  const { PK, SK, ...log } = item;
+  const { PK: _pk, SK: _sk, ...log } = item;
   return ok(log);
 }
 

@@ -30,11 +30,10 @@ const FavouriteBodySchema = z.object({
 });
 
 function stripKeys(item: Record<string, unknown>) {
-  const { PK, SK, ...rest } = item;
+  const { PK: _pk, SK: _sk, ...rest } = item;
   return rest;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function attachMealTotals(meal: Record<string, unknown>) {
   const foodItems = (meal.foodItems as Record<string, unknown>[]) ?? [];
   const totals = computeMealTotals(

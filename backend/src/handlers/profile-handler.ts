@@ -3,13 +3,7 @@ import type { APIGatewayProxyEventV2WithJWTAuthorizer, APIGatewayProxyResultV2 }
 import { z } from 'zod';
 import { getUserId } from '../lib/auth.js';
 import { docClient, TABLE } from '../lib/dynamo.js';
-import {
-  badRequest,
-  internalError,
-  notFound,
-  ok,
-  created,
-} from '../lib/response.js';
+import { badRequest, internalError, notFound, ok } from '../lib/response.js';
 
 const ProfileSchema = z.object({ weightUnit: z.enum(['kg', 'lb']) });
 const PatchProgramSchema = z.object({ programId: z.string().nullable() });
@@ -20,7 +14,7 @@ async function getProfile(userId: string): Promise<APIGatewayProxyResultV2> {
     new GetCommand({ TableName: TABLE, Key: { PK: `USER#${userId}`, SK: 'PROFILE' } }),
   );
   if (!Item) return notFound('Profile not found.');
-  const { PK, SK, ...profile } = Item;
+  const { PK: _pk, SK: _sk, ...profile } = Item;
   return ok(profile);
 }
 
@@ -38,7 +32,7 @@ async function putProfile(userId: string, body: string | null): Promise<APIGatew
     updatedAt: now,
   };
   await docClient.send(new PutCommand({ TableName: TABLE, Item: item }));
-  const { PK, SK, ...profile } = item;
+  const { PK: _pk, SK: _sk, ...profile } = item;
   return ok(profile);
 }
 
@@ -69,7 +63,7 @@ async function patchActiveProgram(
       ReturnValues: 'ALL_NEW',
     }),
   );
-  const { PK, SK, ...profile } = Attributes ?? {};
+  const { PK: _pk, SK: _sk, ...profile } = Attributes ?? {};
   return ok(profile);
 }
 
@@ -100,7 +94,7 @@ async function patchActiveMealPlan(
       ReturnValues: 'ALL_NEW',
     }),
   );
-  const { PK, SK, ...profile } = Attributes ?? {};
+  const { PK: _pk, SK: _sk, ...profile } = Attributes ?? {};
   return ok(profile);
 }
 

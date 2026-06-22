@@ -13,7 +13,7 @@ const ExerciseBodySchema = z.object({
 });
 
 function stripKeys(item: Record<string, unknown>) {
-  const { PK, SK, ...rest } = item;
+  const { PK: _pk, SK: _sk, ...rest } = item;
   return rest;
 }
 

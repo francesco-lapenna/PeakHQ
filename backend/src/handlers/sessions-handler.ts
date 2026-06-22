@@ -28,7 +28,7 @@ const SetBodySchema = z.object({
 });
 
 function stripKeys(item: Record<string, unknown>) {
-  const { PK, SK, ...rest } = item;
+  const { PK: _pk, SK: _sk, ...rest } = item;
   return rest;
 }
 
@@ -117,7 +117,7 @@ async function getSession(userId: string, sessionId: string): Promise<APIGateway
     ExpressionAttributeValues: { ':pk': `USER#${userId}`, ':prefix': `SESSION#${sessionId}#SET#` },
   }));
   const sets = setItems.map((s: Record<string, unknown>) => {
-    const { PK, SK, GSI1PK, GSI1SK, ...rest } = s;
+    const { PK: _pk, SK: _sk, GSI1PK: _g1pk, GSI1SK: _g1sk, ...rest } = s;
     return rest;
   });
   return ok({ ...stripKeys(session), sets });

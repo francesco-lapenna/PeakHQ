@@ -1,7 +1,7 @@
-import { GetCommand, PutCommand, QueryCommand } from '@aws-sdk/lib-dynamodb';
+import { PutCommand, QueryCommand } from '@aws-sdk/lib-dynamodb';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { docClient } from '../lib/dynamo.js';
-import { makeEvent, TEST_USER_ID } from '../test-helpers/event.js';
+import { makeEvent } from '../test-helpers/event.js';
 import { handler } from './tracking-handler.js';
 
 vi.mock('../lib/dynamo.js', () => ({
@@ -109,12 +109,6 @@ const mockWeeklyLog = {
   notes: 'Good week',
   updatedAt: '2026-06-22T00:00:00Z',
 };
-
-const mockBwEntries = [
-  { date: '2026-06-15', weight: 82.0, unit: 'kg' },
-  { date: '2026-06-16', weight: 83.0, unit: 'kg' },
-  { date: '2026-06-22', weight: 82.5, unit: 'kg' },
-];
 
 const mockProfile = {
   weightUnit: 'kg',

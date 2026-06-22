@@ -15,7 +15,7 @@ const DayBodySchema = z.object({
 const ReorderSchema = z.object({ dayOrder: z.array(z.string()).min(1) });
 
 function stripKeys(item: Record<string, unknown>) {
-  const { PK, SK, ...rest } = item;
+  const { PK: _pk, SK: _sk, ...rest } = item;
   return rest;
 }
 
