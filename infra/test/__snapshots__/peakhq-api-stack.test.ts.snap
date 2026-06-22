@@ -20,7 +20,7 @@ exports[`PeakHQApiStack matches snapshot 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "a0d2e99cb3e6924993f599e54d186dfd00719b7b31442c7c3deca4853f5dc7b7.zip",
+          "S3Key": "fab1688c98a82b7ab9f880b323cc0a7cbdb69543a9b6a6d08b8a26aaa8538faa.zip",
         },
         "Environment": {
           "Variables": {
@@ -398,7 +398,7 @@ exports[`PeakHQApiStack matches snapshot 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "HttpApiDELETEapifavouritesF3B7BE04": {
+    "HttpApiDELETEapifavouritesoffId6BC68FED": {
       "Properties": {
         "ApiId": {
           "Ref": "HttpApiF5A9A8A7",
@@ -407,14 +407,14 @@ exports[`PeakHQApiStack matches snapshot 1`] = `
         "AuthorizerId": {
           "Ref": "HttpApiJwtAuthorizer14F16BDB",
         },
-        "RouteKey": "DELETE /api/favourites",
+        "RouteKey": "DELETE /api/favourites/{offId}",
         "Target": {
           "Fn::Join": [
             "",
             [
               "integrations/",
               {
-                "Ref": "HttpApiGETapifavouritesNutritionHandlerIntegrationapifavourites21A473B7",
+                "Ref": "HttpApiDELETEapifavouritesoffIdNutritionHandlerIntegrationapifavouritesoffIdD1B63456",
               },
             ],
           ],
@@ -422,7 +422,23 @@ exports[`PeakHQApiStack matches snapshot 1`] = `
       },
       "Type": "AWS::ApiGatewayV2::Route",
     },
-    "HttpApiDELETEapifavouritesNutritionHandlerIntegrationapifavouritesPermissionAB3E527F": {
+    "HttpApiDELETEapifavouritesoffIdNutritionHandlerIntegrationapifavouritesoffIdD1B63456": {
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApiF5A9A8A7",
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "NutritionHandlerF0EDA053",
+            "Arn",
+          ],
+        },
+        "PayloadFormatVersion": "2.0",
+      },
+      "Type": "AWS::ApiGatewayV2::Integration",
+    },
+    "HttpApiDELETEapifavouritesoffIdNutritionHandlerIntegrationapifavouritesoffIdPermissionDACBB209": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -452,7 +468,7 @@ exports[`PeakHQApiStack matches snapshot 1`] = `
               {
                 "Ref": "HttpApiF5A9A8A7",
               },
-              "/*/*/api/favourites",
+              "/*/*/api/favourites/{offId}",
             ],
           ],
         },
@@ -3313,7 +3329,7 @@ exports[`PeakHQApiStack matches snapshot 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "a0d2e99cb3e6924993f599e54d186dfd00719b7b31442c7c3deca4853f5dc7b7.zip",
+          "S3Key": "bf5b6c5b5260d07850ac1156db74d58a44daae697dd42a0256f16951c218b81e.zip",
         },
         "Environment": {
           "Variables": {
@@ -3446,7 +3462,7 @@ exports[`PeakHQApiStack matches snapshot 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "a0d2e99cb3e6924993f599e54d186dfd00719b7b31442c7c3deca4853f5dc7b7.zip",
+          "S3Key": "4ec7a62b9230ea9da3830fbaaeca6e8a73dde9c6edfb0a3527e76d387d091cd8.zip",
         },
         "Environment": {
           "Variables": {
@@ -3579,7 +3595,7 @@ exports[`PeakHQApiStack matches snapshot 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "a0d2e99cb3e6924993f599e54d186dfd00719b7b31442c7c3deca4853f5dc7b7.zip",
+          "S3Key": "de059ad7f0fab4ac371c5c1406a630bf5cb71b1ce51bfa1f7e6c3d5dbe4b4c1f.zip",
         },
         "Environment": {
           "Variables": {
@@ -3845,7 +3861,7 @@ exports[`PeakHQApiStack matches snapshot 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "a0d2e99cb3e6924993f599e54d186dfd00719b7b31442c7c3deca4853f5dc7b7.zip",
+          "S3Key": "23f4108c25fac9e6ba814e79acf2f7c98c31b28481e2572119561904d7c6f967.zip",
         },
         "Environment": {
           "Variables": {

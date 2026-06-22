@@ -111,7 +111,8 @@ export class PeakHQApiStack extends Stack {
     addRoutes(['/api/meal-plans'], [GET, POST], nutritionFn);
     addRoutes(['/api/meal-plans/{id}'], [GET, PUT, DELETE], nutritionFn);
     addRoutes(['/api/meal-plans/{id}/meals/{mealId}'], [POST, PUT, DELETE], nutritionFn);
-    addRoutes(['/api/favourites'], [GET, POST, DELETE], nutritionFn);
+    addRoutes(['/api/favourites'], [GET, POST], nutritionFn);
+    addRoutes(['/api/favourites/{offId}'], [DELETE], nutritionFn);
 
     addRoutes(['/api/body-weight'], [GET], trackingFn);
     addRoutes(['/api/body-weight/{date}'], [PUT, DELETE], trackingFn);
