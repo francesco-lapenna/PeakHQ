@@ -26,24 +26,26 @@ See `docs/adr/0003-tech-stack.md` for full rationale.
 Never suggest Vercel, Netlify, Heroku, Render, Railway, Fly.io, or any non-AWS hosting.
 
 **Approved non-AWS exceptions (these two only):**
+
 - **GitHub** — source control (required: AWS CodeCommit and CodeCatalyst are both deprecated for new customers)
 - **GitHub Actions** — CI/CD (same reason as above)
 
 ### Approved Free Tier Architecture
 
-| Layer | Service | Free Tier Limit |
-|---|---|---|
-| Frontend | S3 + CloudFront | 5 GB S3 storage, 50 GB CloudFront egress/month |
-| Backend | Lambda + API Gateway | 1M Lambda requests/month, 1M API Gateway calls/month |
-| Database | DynamoDB | 25 GB storage, 25 RCU + 25 WCU provisioned |
-| Auth | Cognito | 50,000 MAU |
-| Secrets | Secrets Manager | 30-day trial, then $0.40/secret/month — use sparingly |
-| Monitoring | CloudWatch | 10 custom metrics, 5 GB logs ingestion/month |
-| IaC | AWS CDK | Free (synthesizes CloudFormation, which is also free) |
+| Layer      | Service              | Free Tier Limit                                       |
+| ---------- | -------------------- | ----------------------------------------------------- |
+| Frontend   | S3 + CloudFront      | 5 GB S3 storage, 50 GB CloudFront egress/month        |
+| Backend    | Lambda + API Gateway | 1M Lambda requests/month, 1M API Gateway calls/month  |
+| Database   | DynamoDB             | 25 GB storage, 25 RCU + 25 WCU provisioned            |
+| Auth       | Cognito              | 50,000 MAU                                            |
+| Secrets    | Secrets Manager      | 30-day trial, then $0.40/secret/month — use sparingly |
+| Monitoring | CloudWatch           | 10 custom metrics, 5 GB logs ingestion/month          |
+| IaC        | AWS CDK              | Free (synthesizes CloudFormation, which is also free) |
 
 ### Free Tier Guard Rails
 
 Do NOT introduce these — they cost money regardless of usage:
+
 - **NAT Gateway** — always paid (~$32/month minimum). Use VPC endpoints or public subnets where acceptable.
 - **RDS** — free tier expires after 12 months. Use DynamoDB unless a relational model is explicitly justified.
 - **CloudWatch Detailed Monitoring** — Basic is free; never enable Detailed Monitoring.
@@ -66,6 +68,7 @@ release/x   ← cut from develop when ready to promote; merges into main
 ```
 
 Rules:
+
 - Always branch from `develop`, not `main`.
 - All changes reach `main` only via a PR from a `release/*` branch.
 - Delete branches after they are merged.
@@ -74,26 +77,28 @@ Rules:
 
 Format: `<type>(<scope>): <subject>`
 
-| Type | When to use |
-|---|---|
-| `feat` | New feature for the user |
-| `fix` | Bug fix |
-| `test` | Adding or correcting tests |
+| Type       | When to use                                         |
+| ---------- | --------------------------------------------------- |
+| `feat`     | New feature for the user                            |
+| `fix`      | Bug fix                                             |
+| `test`     | Adding or correcting tests                          |
 | `refactor` | Code change that is neither a bug fix nor a feature |
-| `chore` | Maintenance: deps, config, tooling |
-| `docs` | Documentation only |
-| `build` | Build system changes |
-| `ci` | CI/CD workflow changes |
-| `perf` | Performance improvement |
-| `style` | Formatting, no logic change |
+| `chore`    | Maintenance: deps, config, tooling                  |
+| `docs`     | Documentation only                                  |
+| `build`    | Build system changes                                |
+| `ci`       | CI/CD workflow changes                              |
+| `perf`     | Performance improvement                             |
+| `style`    | Formatting, no logic change                         |
 
 Rules:
+
 - Scope is optional, lowercase (e.g., `auth`, `api`, `infra`, `frontend`)
 - Subject: imperative mood, lowercase, no trailing period, ≤72 chars
 - Breaking changes: add `!` after type — `feat(api)!: change response shape`
 - Breaking change footer: `BREAKING CHANGE: <description>` on its own line
 
 Examples:
+
 ```
 feat(auth): add Cognito user pool stack
 fix(api): handle Lambda timeout on cold start
@@ -120,12 +125,14 @@ TDD cycle for EVERY new feature and bug fix:
 3. **REFACTOR** — Clean up the implementation while keeping tests green.
 
 Rules:
+
 - Never write implementation code before a corresponding test exists.
 - Test file must be committed in the same commit as, or before, the implementation.
 - If the user says "skip the test", remind them of this rule and ask for explicit confirmation before proceeding.
 - Coverage target: **80% line coverage minimum** — enforced in CI via `npm run test:coverage`.
 
 Test commands:
+
 ```bash
 npm test                # Vitest (frontend + backend unit/integration)
 npm run test:coverage   # Vitest with coverage report (enforced in CI)
@@ -134,6 +141,7 @@ npm run test:e2e        # Playwright E2E tests
 ```
 
 Test structure:
+
 ```
 frontend/src/           ← co-located *.test.tsx files (Vitest + React Testing Library)
 backend/src/            ← co-located *.test.ts files (Vitest)
@@ -195,6 +203,7 @@ Major architectural decisions are recorded in `docs/adr/` using [MADR format](ht
 At the end of any session where a major architectural decision is made, propose writing a new ADR.
 
 Existing ADRs:
+
 - [0001](docs/adr/0001-use-aws-cdk-for-iac.md) — Use AWS CDK for infrastructure as code
 - [0002](docs/adr/0002-github-for-source-control.md) — Use GitHub and GitHub Actions for source control and CI/CD
 - [0003](docs/adr/0003-tech-stack.md) — Full tech stack decision (React, Node.js, DynamoDB, Cognito, Vitest, Playwright)

@@ -9,9 +9,9 @@
 
 ## GSI
 
-| Name | Partition key | Sort key | Projection | Purpose |
-|---|---|---|---|---|
-| GSI1 | `GSI1PK` (String) | `GSI1SK` (String) | ALL | Exercise progression: all sets for one exercise, sorted by date |
+| Name | Partition key     | Sort key          | Projection | Purpose                                                         |
+| ---- | ----------------- | ----------------- | ---------- | --------------------------------------------------------------- |
+| GSI1 | `GSI1PK` (String) | `GSI1SK` (String) | ALL        | Exercise progression: all sets for one exercise, sorted by date |
 
 All other access patterns are served by `SK begins_with` queries on the base table.
 
@@ -19,20 +19,20 @@ All other access patterns are served by `SK begins_with` queries on the base tab
 
 ## Entity Key Patterns
 
-| Entity | PK | SK | GSI1PK | GSI1SK |
-|---|---|---|---|---|
-| UserProfile | `USER#<sub>` | `PROFILE` | — | — |
-| Exercise (library) | `EXERCISE_LIBRARY` | `EXERCISE#<exerciseId>` | — | — |
-| Exercise (custom) | `USER#<sub>` | `EXERCISE#<exerciseId>` | — | — |
-| Program | `USER#<sub>` | `PROGRAM#<programId>` | — | — |
-| ProgramDay | `USER#<sub>` | `PROGRAM#<programId>#DAY#<dayId>` | — | — |
-| Session | `USER#<sub>` | `SESSION#<YYYY-MM-DD>#<sessionId>` | — | — |
-| SessionSet | `USER#<sub>` | `SESSION#<sessionId>#SET#<setId>` | `USER#<sub>#EXERCISE#<exerciseId>` | `SESSION#<YYYY-MM-DD>#<sessionId>#SET#<setId>` |
-| MealPlan | `USER#<sub>` | `MEALPLAN#<mealPlanId>` | — | — |
-| Meal | `USER#<sub>` | `MEALPLAN#<mealPlanId>#MEAL#<mealId>` | — | — |
-| FoodFavourite | `USER#<sub>` | `FAVOURITE#<offId>` | — | — |
-| BodyWeightEntry | `USER#<sub>` | `BW#<YYYY-MM-DD>` | — | — |
-| WeeklyLog | `USER#<sub>` | `WEEKLYLOG#<YYYY-MM-DD>` | — | — |
+| Entity             | PK                 | SK                                    | GSI1PK                             | GSI1SK                                         |
+| ------------------ | ------------------ | ------------------------------------- | ---------------------------------- | ---------------------------------------------- |
+| UserProfile        | `USER#<sub>`       | `PROFILE`                             | —                                  | —                                              |
+| Exercise (library) | `EXERCISE_LIBRARY` | `EXERCISE#<exerciseId>`               | —                                  | —                                              |
+| Exercise (custom)  | `USER#<sub>`       | `EXERCISE#<exerciseId>`               | —                                  | —                                              |
+| Program            | `USER#<sub>`       | `PROGRAM#<programId>`                 | —                                  | —                                              |
+| ProgramDay         | `USER#<sub>`       | `PROGRAM#<programId>#DAY#<dayId>`     | —                                  | —                                              |
+| Session            | `USER#<sub>`       | `SESSION#<YYYY-MM-DD>#<sessionId>`    | —                                  | —                                              |
+| SessionSet         | `USER#<sub>`       | `SESSION#<sessionId>#SET#<setId>`     | `USER#<sub>#EXERCISE#<exerciseId>` | `SESSION#<YYYY-MM-DD>#<sessionId>#SET#<setId>` |
+| MealPlan           | `USER#<sub>`       | `MEALPLAN#<mealPlanId>`               | —                                  | —                                              |
+| Meal               | `USER#<sub>`       | `MEALPLAN#<mealPlanId>#MEAL#<mealId>` | —                                  | —                                              |
+| FoodFavourite      | `USER#<sub>`       | `FAVOURITE#<offId>`                   | —                                  | —                                              |
+| BodyWeightEntry    | `USER#<sub>`       | `BW#<YYYY-MM-DD>`                     | —                                  | —                                              |
+| WeeklyLog          | `USER#<sub>`       | `WEEKLYLOG#<YYYY-MM-DD>`              | —                                  | —                                              |
 
 `<sub>` is the Cognito user pool `sub` claim (UUID), extracted from the JWT by Lambda.
 `<YYYY-MM-DD>` dates sort lexicographically in the SK, giving chronological range queries for free.
@@ -262,41 +262,41 @@ updatedAt    String   ISO-8601
 
 ## Access Patterns
 
-| Access Pattern | Operation | Key Condition |
-|---|---|---|
-| Get user profile | GetItem | `PK=USER#<sub>, SK=PROFILE` |
-| List library exercises | Query | `PK=EXERCISE_LIBRARY` |
-| List custom exercises | Query | `PK=USER#<sub>, SK begins_with EXERCISE#` |
-| Get single exercise | GetItem | `PK=..., SK=EXERCISE#<id>` |
-| List all programs | Query | `PK=USER#<sub>, SK begins_with PROGRAM#` (filter: SK not contains `#DAY#`) |
-| List days for a program | Query | `PK=USER#<sub>, SK begins_with PROGRAM#<id>#DAY#` |
-| Get single program day | GetItem | `PK=USER#<sub>, SK=PROGRAM#<id>#DAY#<dayId>` |
-| List sessions (history) | Query | `PK=USER#<sub>, SK begins_with SESSION#`, `ScanIndexForward=false` |
-| Sessions in date range | Query | `PK=USER#<sub>, SK between SESSION#<d1> and SESSION#<d2>` |
-| Sets for a session | Query | `PK=USER#<sub>, SK begins_with SESSION#<sessionId>#SET#` |
-| Exercise progression | Query on GSI1 | `GSI1PK=USER#<sub>#EXERCISE#<id>`, `ScanIndexForward=true` |
-| List meal plans | Query | `PK=USER#<sub>, SK begins_with MEALPLAN#` (filter: SK not contains `#MEAL#`) |
-| List meals for a plan | Query | `PK=USER#<sub>, SK begins_with MEALPLAN#<id>#MEAL#` |
-| List favourites | Query | `PK=USER#<sub>, SK begins_with FAVOURITE#` |
-| Get BW entries for week | Query | `PK=USER#<sub>, SK between BW#<Mon> and BW#<Sun>` |
-| Get all BW entries (chart) | Query | `PK=USER#<sub>, SK begins_with BW#`, `ScanIndexForward=true` |
-| List weekly logs | Query | `PK=USER#<sub>, SK begins_with WEEKLYLOG#`, `ScanIndexForward=false` |
+| Access Pattern             | Operation     | Key Condition                                                                |
+| -------------------------- | ------------- | ---------------------------------------------------------------------------- |
+| Get user profile           | GetItem       | `PK=USER#<sub>, SK=PROFILE`                                                  |
+| List library exercises     | Query         | `PK=EXERCISE_LIBRARY`                                                        |
+| List custom exercises      | Query         | `PK=USER#<sub>, SK begins_with EXERCISE#`                                    |
+| Get single exercise        | GetItem       | `PK=..., SK=EXERCISE#<id>`                                                   |
+| List all programs          | Query         | `PK=USER#<sub>, SK begins_with PROGRAM#` (filter: SK not contains `#DAY#`)   |
+| List days for a program    | Query         | `PK=USER#<sub>, SK begins_with PROGRAM#<id>#DAY#`                            |
+| Get single program day     | GetItem       | `PK=USER#<sub>, SK=PROGRAM#<id>#DAY#<dayId>`                                 |
+| List sessions (history)    | Query         | `PK=USER#<sub>, SK begins_with SESSION#`, `ScanIndexForward=false`           |
+| Sessions in date range     | Query         | `PK=USER#<sub>, SK between SESSION#<d1> and SESSION#<d2>`                    |
+| Sets for a session         | Query         | `PK=USER#<sub>, SK begins_with SESSION#<sessionId>#SET#`                     |
+| Exercise progression       | Query on GSI1 | `GSI1PK=USER#<sub>#EXERCISE#<id>`, `ScanIndexForward=true`                   |
+| List meal plans            | Query         | `PK=USER#<sub>, SK begins_with MEALPLAN#` (filter: SK not contains `#MEAL#`) |
+| List meals for a plan      | Query         | `PK=USER#<sub>, SK begins_with MEALPLAN#<id>#MEAL#`                          |
+| List favourites            | Query         | `PK=USER#<sub>, SK begins_with FAVOURITE#`                                   |
+| Get BW entries for week    | Query         | `PK=USER#<sub>, SK between BW#<Mon> and BW#<Sun>`                            |
+| Get all BW entries (chart) | Query         | `PK=USER#<sub>, SK begins_with BW#`, `ScanIndexForward=true`                 |
+| List weekly logs           | Query         | `PK=USER#<sub>, SK begins_with WEEKLYLOG#`, `ScanIndexForward=false`         |
 
 ---
 
 ## Computed Fields (never stored)
 
-| Field | Computed from | Where |
-|---|---|---|
-| Meal totals (kcal, protein, carbs, fat) | `foodItems[].quantityG × *Per100g / 100` | Lambda or frontend |
-| Plan totals | Sum of meal totals | Lambda or frontend |
-| Plan deviations (Δ) | Plan totals − targets | Lambda or frontend |
-| Weekly avg BW | Mean of `BW#` entries for Mon–Sun | Lambda (`GET /api/weekly-logs`) |
-| Weekly min/max BW | Min/max of `BW#` entries for Mon–Sun | Lambda (`GET /api/weekly-logs`) |
-| Weekly Δ BW | avg BW this week − avg BW previous week | Lambda (`GET /api/weekly-logs`) |
-| Weekly Kcals | Active meal plan `calorieTarget` | Lambda (`GET /api/weekly-logs`) |
-| Weekly Δ Kcals | Kcals this week − Kcals previous week | Lambda (`GET /api/weekly-logs`) |
-| Lifting days in weekly dashboard | From `WeeklyLog.liftingDays` (manual) | Already stored |
+| Field                                   | Computed from                            | Where                           |
+| --------------------------------------- | ---------------------------------------- | ------------------------------- |
+| Meal totals (kcal, protein, carbs, fat) | `foodItems[].quantityG × *Per100g / 100` | Lambda or frontend              |
+| Plan totals                             | Sum of meal totals                       | Lambda or frontend              |
+| Plan deviations (Δ)                     | Plan totals − targets                    | Lambda or frontend              |
+| Weekly avg BW                           | Mean of `BW#` entries for Mon–Sun        | Lambda (`GET /api/weekly-logs`) |
+| Weekly min/max BW                       | Min/max of `BW#` entries for Mon–Sun     | Lambda (`GET /api/weekly-logs`) |
+| Weekly Δ BW                             | avg BW this week − avg BW previous week  | Lambda (`GET /api/weekly-logs`) |
+| Weekly Kcals                            | Active meal plan `calorieTarget`         | Lambda (`GET /api/weekly-logs`) |
+| Weekly Δ Kcals                          | Kcals this week − Kcals previous week    | Lambda (`GET /api/weekly-logs`) |
+| Lifting days in weekly dashboard        | From `WeeklyLog.liftingDays` (manual)    | Already stored                  |
 
 The weekly-logs Lambda fetches WeeklyLog items and BodyWeightEntry items for the
 requested date range in parallel (`Promise.all` with two Query calls), then assembles

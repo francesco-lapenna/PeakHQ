@@ -43,6 +43,7 @@ Do NOT proceed to Refactor if any test is failing.
 ## Commit
 
 Stage tests first, then implementation:
+
 ```
 git add <test-file>
 git add <implementation-file>

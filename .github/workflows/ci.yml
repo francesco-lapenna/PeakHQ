@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: ["**"]
+    branches: ['**']
   pull_request:
     branches: [main, develop]
 
@@ -30,8 +30,8 @@ jobs:
       - uses: actions/setup-node@v4
         if: steps.bootstrap.outputs.ready == 'true'
         with:
-          node-version: "22"
-          cache: "npm"
+          node-version: '22'
+          cache: 'npm'
 
       - name: Install dependencies
         if: steps.bootstrap.outputs.ready == 'true'
@@ -50,10 +50,10 @@ jobs:
         run: npm run test:coverage
 
       - name: CDK snapshot tests
-        if: steps.bootstrap.outputs.ready == 'true'
+        if: steps.bootstrap.outputs.ready == 'true' && hashFiles('infra/jest.config.*') != ''
         run: npm run test:infra
 
       - name: CDK synth
-        if: steps.bootstrap.outputs.ready == 'true'
+        if: steps.bootstrap.outputs.ready == 'true' && hashFiles('infra/cdk.json') != ''
         working-directory: infra
         run: npm run synth

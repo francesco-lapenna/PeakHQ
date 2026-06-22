@@ -1,0 +1,9 @@
+{
+  "name": "@peakhq/infra",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "test": "echo 'No infra tests yet — run Phase 3 Step 2 to scaffold CDK project'",
+    "synth": "echo 'CDK not yet initialised — run Phase 3 Step 2'"
+  }
+}
