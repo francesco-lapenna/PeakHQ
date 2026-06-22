@@ -1,4 +1,4 @@
-import { Duration, Stack, StackProps } from 'aws-cdk-lib';
+import { Duration, Fn, Stack, StackProps } from 'aws-cdk-lib';
 import * as apigatewayv2 from 'aws-cdk-lib/aws-apigatewayv2';
 import { HttpJwtAuthorizer } from 'aws-cdk-lib/aws-apigatewayv2-authorizers';
 import { HttpLambdaIntegration } from 'aws-cdk-lib/aws-apigatewayv2-integrations';
@@ -121,7 +121,9 @@ export class PeakHQApiStack extends Stack {
 
     addRoutes(['/api/export'], [GET], exportFn);
 
-    // Strip the https:// prefix for use as a CloudFront origin hostname
-    this.apiUrl = api.apiEndpoint.replace('https://', '');
+    // api.apiEndpoint is a CDK token at synth time, so JS .replace() has no effect.
+    // Use Fn.select to strip the protocol at CloudFormation evaluation time instead.
+    // Fn.split('/', 'https://id.execute-api.region.amazonaws.com') → ['https:', '', 'id...']
+    this.apiUrl = Fn.select(2, Fn.split('/', api.apiEndpoint));
   }
 }
