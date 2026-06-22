@@ -1,4 +1,4 @@
-import { Stack, StackProps } from 'aws-cdk-lib';
+import { CfnOutput, Stack, StackProps } from 'aws-cdk-lib';
 import * as cognito from 'aws-cdk-lib/aws-cognito';
 import { Construct } from 'constructs';
 
@@ -33,7 +33,8 @@ export class PeakHQAuthStack extends Stack {
       oAuth: {
         flows: { authorizationCodeGrant: true },
         scopes: [cognito.OAuthScope.EMAIL, cognito.OAuthScope.OPENID, cognito.OAuthScope.PROFILE],
-        callbackUrls: ['http://localhost:5173'],
+        // Production CloudFront callback URL must be added here after first `cdk deploy`.
+        callbackUrls: ['http://localhost:5173/auth/callback'],
         logoutUrls: ['http://localhost:5173'],
       },
       authFlows: { userSrp: true },
@@ -42,6 +43,21 @@ export class PeakHQAuthStack extends Stack {
     new cognito.UserPoolDomain(this, 'Domain', {
       userPool: this.userPool,
       cognitoDomain: { domainPrefix: 'peakhq-auth' },
+    });
+
+    new CfnOutput(this, 'UserPoolId', {
+      value: this.userPool.userPoolId,
+      description: 'Cognito User Pool ID',
+    });
+
+    new CfnOutput(this, 'UserPoolClientId', {
+      value: this.userPoolClient.userPoolClientId,
+      description: 'Cognito User Pool Client ID',
+    });
+
+    new CfnOutput(this, 'CognitoDomain', {
+      value: `peakhq-auth.auth.${this.region}.amazoncognito.com`,
+      description: 'Cognito Hosted UI domain',
     });
   }
 }
