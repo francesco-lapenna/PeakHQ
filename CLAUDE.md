@@ -1,16 +1,23 @@
 # CLAUDE.md — PeakHQ
 
-[PLACEHOLDER: one-line project description]
+Personal health dashboard — training programming, meal planning, and weekly metric tracking in one place.
 
 ## Tech Stack
 
-[PLACEHOLDER — fill in after tech stack decision]
-- **Runtime:** TBD
-- **Framework:** TBD
-- **IaC:** AWS CDK (TypeScript)
+- **Frontend:** React 19 + TypeScript + Vite → S3 + CloudFront (SPA, static deploy)
+- **UI:** shadcn/ui + Tailwind CSS v4
+- **Client state:** TanStack Query v5, React Router v7 (library mode), React Hook Form + Zod, Recharts
+- **Backend:** Node.js 22 LTS + TypeScript → AWS Lambda (128 MB) + API Gateway HTTP API v2
+- **Lambda middleware:** AWS Lambda Powertools for TypeScript
+- **Validation:** Zod schemas shared between frontend and backend
+- **Database:** DynamoDB single-table design, on-demand capacity, 1 GSI
+- **Auth:** Cognito Hosted UI (PKCE) + API Gateway JWT authorizer
+- **IaC:** AWS CDK (TypeScript) — `infra/` workspace
 - **Source Control:** GitHub
 - **CI/CD:** GitHub Actions
 - **Primary Region:** eu-south-1 (Milan); eu-west-1 (Ireland) as fallback if a service is unavailable
+
+See `docs/adr/0003-tech-stack.md` for full rationale.
 
 ## Infrastructure Constraint
 
@@ -116,15 +123,22 @@ Rules:
 - Never write implementation code before a corresponding test exists.
 - Test file must be committed in the same commit as, or before, the implementation.
 - If the user says "skip the test", remind them of this rule and ask for explicit confirmation before proceeding.
-- Coverage target: **80% line coverage minimum**. [Update with actual command after stack decision]
+- Coverage target: **80% line coverage minimum** — enforced in CI via `npm run test:coverage`.
 
-Test structure [PLACEHOLDER — update after tech stack decision]:
+Test commands:
+```bash
+npm test                # Vitest (frontend + backend unit/integration)
+npm run test:coverage   # Vitest with coverage report (enforced in CI)
+npm run test:infra      # Jest CDK snapshot tests (infra/ workspace)
+npm run test:e2e        # Playwright E2E tests
 ```
-tests/
-  unit/          ← fast, isolated, no external dependencies
-  integration/   ← hits real AWS services or DB
-  e2e/           ← full end-to-end against a deployed environment
-infra/test/      ← CDK snapshot tests (mandatory for every Stack)
+
+Test structure:
+```
+frontend/src/           ← co-located *.test.tsx files (Vitest + React Testing Library)
+backend/src/            ← co-located *.test.ts files (Vitest)
+infra/test/             ← CDK snapshot tests (Jest, mandatory for every Stack)
+e2e/                    ← Playwright end-to-end tests
 ```
 
 ## Infrastructure as Code
@@ -142,20 +156,32 @@ infra/test/      ← CDK snapshot tests (mandatory for every Stack)
 - No commented-out code.
 - No hardcoded secrets, keys, or credentials — use AWS Secrets Manager (runtime) or GitHub Secrets (CI).
 - Environment config is loaded from environment variables only; no config files committed to git.
-- [PLACEHOLDER: linting command] — run before every commit.
-- [PLACEHOLDER: formatting command] — run before every commit.
+- Run `npm run lint` before every commit.
+- Run `npm run format` before every commit.
 
 ## File Structure
 
 ```
-infra/                 ← AWS CDK TypeScript project
-  bin/                 ← CDK app entry point
-  lib/                 ← Stack definitions
-  test/                ← CDK snapshot tests
-src/                   ← Application source [structure TBD by stack]
-tests/                 ← Test suites [structure TBD by stack]
+frontend/              ← React 19 + Vite SPA (npm workspace)
+  src/
+    components/        ← shadcn/ui + custom components
+    features/          ← feature folders (training/, nutrition/, tracking/, auth/)
+    lib/               ← API client, query keys, utils
+    routes/            ← React Router route components
+backend/               ← Lambda handlers (npm workspace)
+  src/
+    handlers/          ← one file per function group
+    lib/               ← DynamoDB client, auth utils, shared Zod schemas
+infra/                 ← AWS CDK TypeScript project (npm workspace)
+  bin/                 ← CDK app entry point (peakhq.ts)
+  lib/                 ← Stack definitions (auth, data, api, frontend)
+  test/                ← CDK snapshot tests (Jest)
+e2e/                   ← Playwright end-to-end tests
 docs/
   adr/                 ← Architecture Decision Records (MADR format)
+  requirements/        ← Requirements document
+  data-model.md        ← DynamoDB table design reference
+  api-contract.md      ← REST API contract reference
 .github/
   workflows/
     ci.yml             ← Runs on every push and PR
@@ -171,3 +197,4 @@ At the end of any session where a major architectural decision is made, propose 
 Existing ADRs:
 - [0001](docs/adr/0001-use-aws-cdk-for-iac.md) — Use AWS CDK for infrastructure as code
 - [0002](docs/adr/0002-github-for-source-control.md) — Use GitHub and GitHub Actions for source control and CI/CD
+- [0003](docs/adr/0003-tech-stack.md) — Full tech stack decision (React, Node.js, DynamoDB, Cognito, Vitest, Playwright)
