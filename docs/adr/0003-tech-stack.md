@@ -137,11 +137,11 @@ See `docs/data-model.md` for the full entity key scheme.
 
 ### Testing
 
-| Scope | Framework | Why |
-|---|---|---|
-| Frontend + backend unit/integration | Vitest | Reuses Vite config, no Babel layer, identical import syntax to app code |
-| CDK infrastructure | Jest + `aws-cdk-lib/assertions` | CDK snapshot test docs and examples target Jest; no benefit to switching |
-| E2E | Playwright | Industry standard, first-class GitHub Actions support |
+| Scope                               | Framework                       | Why                                                                      |
+| ----------------------------------- | ------------------------------- | ------------------------------------------------------------------------ |
+| Frontend + backend unit/integration | Vitest                          | Reuses Vite config, no Babel layer, identical import syntax to app code  |
+| CDK infrastructure                  | Jest + `aws-cdk-lib/assertions` | CDK snapshot test docs and examples target Jest; no benefit to switching |
+| E2E                                 | Playwright                      | Industry standard, first-class GitHub Actions support                    |
 
 Coverage threshold: 80% line coverage enforced in CI via `vitest run --coverage`.
 
