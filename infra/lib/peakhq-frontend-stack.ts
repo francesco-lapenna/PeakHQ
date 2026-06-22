@@ -1,4 +1,4 @@
-import { RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib';
+import { CfnOutput, RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
 import * as s3 from 'aws-cdk-lib/aws-s3';
@@ -44,5 +44,20 @@ export class PeakHQFrontendStack extends Stack {
     });
 
     this.distributionDomainName = distribution.distributionDomainName;
+
+    new CfnOutput(this, 'DistributionDomainName', {
+      value: distribution.distributionDomainName,
+      description: 'CloudFront distribution domain (use for VITE_* env vars)',
+    });
+
+    new CfnOutput(this, 'DistributionId', {
+      value: distribution.distributionId,
+      description: 'CloudFront distribution ID (use for cache invalidation)',
+    });
+
+    new CfnOutput(this, 'BucketName', {
+      value: bucket.bucketName,
+      description: 'S3 bucket name for frontend assets',
+    });
   }
 }

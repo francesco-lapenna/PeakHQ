@@ -46,24 +46,41 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: CDK deploy
-        run: npx cdk deploy --all --require-approval never
+        run: npx cdk deploy --all --require-approval never --outputs-file ../cdk-outputs.json
         working-directory: infra
+
+      - name: Parse CDK outputs
+        id: cdk
+        run: |
+          CF_DOMAIN=$(jq -r '.PeakHQFrontendStack.DistributionDomainName' cdk-outputs.json)
+          echo "CF_DOMAIN=$CF_DOMAIN"           >> "$GITHUB_ENV"
+          echo "CF_DISTRIBUTION_ID=$(jq -r '.PeakHQFrontendStack.DistributionId'   cdk-outputs.json)" >> "$GITHUB_ENV"
+          echo "S3_BUCKET=$(jq -r             '.PeakHQFrontendStack.BucketName'     cdk-outputs.json)" >> "$GITHUB_ENV"
+          echo "COGNITO_CLIENT_ID=$(jq -r     '.PeakHQAuthStack.UserPoolClientId'   cdk-outputs.json)" >> "$GITHUB_ENV"
+          echo "COGNITO_DOMAIN=$(jq -r        '.PeakHQAuthStack.CognitoDomain'      cdk-outputs.json)" >> "$GITHUB_ENV"
 
       - name: Build frontend
         run: npm run build
         working-directory: frontend
+        env:
+          VITE_COGNITO_DOMAIN: ${{ env.COGNITO_DOMAIN }}
+          VITE_COGNITO_CLIENT_ID: ${{ env.COGNITO_CLIENT_ID }}
+          VITE_COGNITO_REDIRECT_URI: https://${{ env.CF_DOMAIN }}/auth/callback
+          VITE_API_BASE_URL: https://${{ env.CF_DOMAIN }}/api
 
       - name: Sync frontend to S3
         run: |
-          aws s3 sync frontend/dist/ s3://${{ secrets.S3_BUCKET_NAME }} \
+          # Hashed assets (JS/CSS bundles) — long-lived cache, content-addressed filenames
+          aws s3 sync frontend/dist/ s3://${{ env.S3_BUCKET }} \
             --delete \
+            --exclude "index.html" \
             --cache-control "public, max-age=31536000, immutable"
-          # HTML files must not be cached so new deployments are picked up immediately
-          aws s3 cp frontend/dist/index.html s3://${{ secrets.S3_BUCKET_NAME }}/index.html \
+          # index.html must never be cached so browsers pick up new deployments immediately
+          aws s3 cp frontend/dist/index.html s3://${{ env.S3_BUCKET }}/index.html \
             --cache-control "no-cache, no-store, must-revalidate"
 
       - name: Invalidate CloudFront cache
         run: |
           aws cloudfront create-invalidation \
-            --distribution-id ${{ secrets.CF_DISTRIBUTION_ID }} \
+            --distribution-id ${{ env.CF_DISTRIBUTION_ID }} \
             --paths "/*"
