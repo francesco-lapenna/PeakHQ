@@ -2,6 +2,35 @@
 
 exports[`PeakHQAuthStack matches snapshot 1`] = `
 {
+  "Outputs": {
+    "CognitoDomain": {
+      "Description": "Cognito Hosted UI domain",
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "peakhq-auth.auth.",
+            {
+              "Ref": "AWS::Region",
+            },
+            ".amazoncognito.com",
+          ],
+        ],
+      },
+    },
+    "UserPoolClientId": {
+      "Description": "Cognito User Pool Client ID",
+      "Value": {
+        "Ref": "UserPoolClient2F5918F7",
+      },
+    },
+    "UserPoolId": {
+      "Description": "Cognito User Pool ID",
+      "Value": {
+        "Ref": "UserPool6BA7E5F2",
+      },
+    },
+  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -81,7 +110,7 @@ exports[`PeakHQAuthStack matches snapshot 1`] = `
           "profile",
         ],
         "CallbackURLs": [
-          "http://localhost:5173",
+          "http://localhost:5173/auth/callback",
         ],
         "ExplicitAuthFlows": [
           "ALLOW_USER_SRP_AUTH",
